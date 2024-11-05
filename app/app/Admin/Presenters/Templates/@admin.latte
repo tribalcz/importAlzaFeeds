@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+
+	<title>{ifset title}{include title|stripHtml} | {/ifset}Sandbox</title>
+
+	<link rel="stylesheet" href="{$basePath}/assets/bootstrap.min.css">
+	<link rel="stylesheet" href="{$basePath}/assets/admin.css">
+</head>
+
+<body>
+<div class="container">
+	{include '#sidebar.latte'}
+
+	<main class="col-md-12">
+	<div n:foreach="$flashes as $flash" n:class="alert, 'alert-' . $flash->type">{$flash->message}</div>
+	{include content}
+	</main>
+</div>
+
+<script src="{$basePath}/assets/netteForms.min.js"></script>
+<script src="{$basePath}/assets/bootstrap.bundle.min.js"></script>
+{block scripts}
+{/block}
+</body>
+</html>

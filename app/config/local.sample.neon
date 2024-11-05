@@ -1,0 +1,39 @@
+parameters:
+
+database:
+	dsn: 'mysql:host=database;dbname=test'
+	user: test
+	password: test
+
+nettrine.dbal:
+  debug:
+    panel: false
+    sourcePaths: [%appDir%/Model/ORM/Entity]
+  connection:
+    host: database
+    driver: pdo_mysql
+    dbname: test
+    user: test
+    password: test
+
+console:
+	url: https://localhost
+	catchExceptions: true
+
+mail:
+	smtp: true
+	host: localhost
+	port: 465
+	username: test@test.cz
+	password: test
+	secure: ssl
+
+#rabbitmq:
+#	connections:
+#		default:
+#			user: test
+#			password: test
+#			host: sandbox_rabbit
+#			vhost: /
+#			port: 5672
+#			lazy: false

@@ -1,0 +1,31 @@
+<form n:name=$name class="my-3 pb-3">
+	<ul class="error" n:ifcontent>
+		<li n:foreach="$form->ownErrors as $error">{$error}</li>
+	</ul>
+
+	<div class="row g-3">
+		<div n:foreach="$form->controls as $name => $input" n:if="!$input->getOption('rendered') && $input->getOption('type') !== 'hidden'" n:class="$input->required ? required, $input->error ? has-error, col-sm-12">
+
+			{label $input, class => "form-label" /}
+
+			{if $input->getOption('type') in ['text', 'textarea']}
+				{input $input, class => 'form-control'}
+			{elseif $input->getOption('type') === 'select'}
+				{input $input, class => 'form-select'}
+			{elseif $input->getOption('type') === 'button'}
+				{input $input, class => 'btn btn-primary'}
+			{elseif $input->getOption('type') === 'checkbox'}
+				<div class="form-check">
+					<input id="{$input->getHtmlId()}" name="{$input->getName()}"{if $input->getValue()} checked="checked"{/if} class="form-check-input" type="checkbox" />
+					<label for="{$input->getHtmlId()}" class="form-check-label">{$input->getCaption()}</label>
+				</div>
+			{elseif $input->getOption('type') === 'radio'}
+				<div class="radio">{input $input}</div>
+			{else}
+				{input $input}
+			{/if}
+
+			<span class="help-block" n:ifcontent>{$input->error ?: $input->getOption('description')}</span>
+		</div>
+	</div>
+</form>

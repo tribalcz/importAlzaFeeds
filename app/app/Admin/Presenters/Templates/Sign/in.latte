@@ -1,0 +1,74 @@
+{block content}
+
+<style>
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        display: flex;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+    }
+
+    .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: auto;
+    }
+
+    .form-signin .checkbox {
+        font-weight: 400;
+    }
+
+    .form-signin .form-floating:focus-within {
+        z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+	.form-floating {
+		margin: 20px 0;
+	}
+    .mb-4 {
+        margin-bottom: 1.5rem !important;
+    }
+</style>
+
+<main class="form-signin text-center">
+	{form signInForm}
+
+		<img class="mb-4" src="{$basePath}/assets/logo.png" alt="" width="72" height="72">
+
+		<h1 class="h3 mb-3 fw-normal" n:block="title">Přihlášení</h1>
+
+		<ul class="error" n:ifcontent>
+			<li n:foreach="$form->ownErrors as $error">{$error}</li>
+		</ul>
+
+		<div class="form-floating">
+			{input email, class => "form-control", placeholder => "name@example.com"}
+			{label email/}
+		</div>
+		<div class="form-floating">
+			{input password, class => "form-control", placeholder => "Password"}
+			{label password/}
+		</div>
+
+		{input send, class => "w-100 btn btn-lg btn-primary"}
+	{/form}
+</main>

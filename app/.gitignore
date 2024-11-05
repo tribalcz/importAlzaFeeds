@@ -1,0 +1,10 @@
+config/local.neon
+composer.lock
+.idea/
+vendor/
+.env
+deployment.php
+.DS_Store
+libs/
+tests/**/output
+/.docker/
