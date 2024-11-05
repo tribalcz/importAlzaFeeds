@@ -24,7 +24,8 @@
         <field name="description" type="text" nullable="true">
             <options>
                 <option name="fixed"/>
-            </options>
+		<option name="collation">utf8mb4_unicode_ci</option> </options>
+                <option name="charset">utf8mb4</option>
         </field>
         <field name="link" type="string" nullable="false" length="255">
             <options>
