@@ -1,0 +1,24 @@
+services:
+	security.passwords: Nette\Security\Passwords(::PASSWORD_BCRYPT, [cost: 12])
+	authorizator: Price2Performance\Price2Performance\Model\Security\AuthorizatorFactory::create
+	- Price2Performance\Price2Performance\Router\RouterFactory::createRouter
+	- Price2Performance\Price2Performance\Model\Utils\DirectoryHelper
+
+	# Forms
+	- Price2Performance\Price2Performance\Forms\FormFactory
+	- Price2Performance\Price2Performance\Forms\SignInFormFactory
+
+	# ORM services
+	- Price2Performance\Price2Performance\Model\ORM\Services\UserService
+
+	# Console Commands
+	- Price2Performance\Price2Performance\Console\CreateUser
+	- Price2Performance\Price2Performance\Console\DownloadFeeds
+	- Price2Performance\Price2Performance\Console\ImportProductsToDatabase
+	- Price2Performance\Price2Performance\Console\Generator(
+	    presenterDir: %appDir%/Presenters
+	    templateDir: %appDir%/Presenters/Templates
+	    repositoryDir: %appDir%/Model/Repository
+	    factoryDir: %appDir%/Model/Factory
+	)
+	- Price2Performance\Price2Performance\Services\CategoryManager
