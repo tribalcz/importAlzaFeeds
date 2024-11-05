@@ -98,6 +98,13 @@ class DownloadFeeds extends BaseCommand
         return preg_replace('/[^a-zA-Z0-9-_.]/', '_', $filename);
     }
 
+    /**
+     * Pokusí se zjistit velikost souboru na vzdáleném serveru
+     *
+     * @param Client $client
+     * @param string $url
+     * @return int|null
+     */
     private function getRemoteFileSize(Client $client, string $url): ?int
     {
         try {
@@ -108,6 +115,16 @@ class DownloadFeeds extends BaseCommand
         }
     }
 
+    /**
+     * Stáhne soubor, v průběhu stahování zobrazuje progressbar
+     *
+     * @param Client $client
+     * @param array $value
+     * @param string $filepath
+     * @param int $totalSize
+     * @return void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     private function downloadFileWithProgress(Client $client, array $value, string $filepath, int $totalSize): void
     {
         $progress = $this->io->createProgressBar($totalSize);
@@ -119,7 +136,7 @@ class DownloadFeeds extends BaseCommand
         $tempFilePath = $filepath . '.temp';
         file_put_contents($tempFilePath, '');
         $response = $client->request('GET', $value['url'], [
-            'stream' => true,
+            'stream' => true, //Tady by se dal klidně použít sink, který by měl být rychlejší. Nicméně požadavkem bylo použití streamu
             'progress' => function($downloadTotal, $downloadedBytes) use ($progress) {
                 $progress->setProgress($downloadedBytes);
             }
@@ -137,6 +154,15 @@ class DownloadFeeds extends BaseCommand
         $this->io->newLine();
     }
 
+    /**
+     * Stáhne soubor bez zobrazení progressbaru, průběžně zobrazuje velikost stahovaného souboru
+     *
+     * @param Client $client
+     * @param array $value
+     * @param string $filepath
+     * @return void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     private function downloadFileWithoutSize(Client $client, array $value, string $filepath): void
     {
         $downloadedBytes = 0;
@@ -158,6 +184,12 @@ class DownloadFeeds extends BaseCommand
         $this->io->newLine();
     }
 
+    /**
+     * Formátuje velikost souboru
+     *
+     * @param int $bytes
+     * @return string
+     */
     private function formatBytes(int $bytes): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -169,6 +201,13 @@ class DownloadFeeds extends BaseCommand
         return round($bytes, 2) . ' ' . $units[$pow];
     }
 
+    /**
+     * Vypíše finální statistiky
+     *
+     * @param array $updateFiles
+     * @param array $notUpdatedFiles
+     * @param array $errorFiles
+     */
     private function displaySummary(
         array $updateFiles,
         array $notUpdatedFiles,
@@ -211,41 +250,4 @@ class DownloadFeeds extends BaseCommand
             ]
         );
     }
-
-    /*public function execute(InputInterface $input, OutputInterface $output)
-	{
-        $tempfile = __DIR__ . '/../../temp/xml';
-        $urls = $this->container->getParameters()['urls'];
-
-        $updateFiles = [];
-        $notUpdatedFiles = [];
-
-        foreach ($urls as $id => $value) {
-            $filepath = $tempfile . '/' . iconv('UTF-8', 'ASCII//TRANSLIT', $value['name']) . '.xml';
-
-            if (!file_exists($filepath) || filemtime($filepath) < time() - 72000) {
-                file_put_contents($filepath, ''); //vyprázdnění souboru před aktualizací
-                $client = new Client();
-                $response = $client->request('GET', $value['url'], ['stream' => true]);
-
-                $stream = $response->getBody();
-                while (!$stream->eof()) {
-                    $chunk = $stream->read(1024);
-                    file_put_contents($filepath, $chunk, FILE_APPEND);
-                }
-
-                $updateFiles[] = $value['name'];
-            } else {
-                $notUpdateFiles[] = $value['name'];
-            }
-        }
-
-        if (!empty($updateFiles))
-            $this->log('Aktualizovane soubory: ' . implode(', ', $updateFiles));
-
-        if (!empty($notUpdateFiles))
-            $this->log('Neaktualizovane soubory: ' . implode(', ', $notUpdateFiles));
-
-		return Command::SUCCESS;
-	}*/
 }
