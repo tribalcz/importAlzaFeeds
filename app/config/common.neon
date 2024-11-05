@@ -1,0 +1,147 @@
+parameters:
+    urls:
+        1:
+            name: "Hračky-pro-děti-a-miminka"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32748'
+        2:
+            name: "TV-foto-audio-video"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32747'
+        3:
+            name: "Velké-spotřebiče"
+            url: 'http://affiliate.alza.cz/feed.xml?id=36847'
+        4:
+            name: "Parfumerie-šperky-a-hodinky"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32743'
+        5:
+            name: "Gaming-hry-a-zábava"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32760'
+        6:
+            name: "Knihy-hudba-filmy-a-poukazy"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32756'
+        7:
+            name: "Sport-a-outdoor"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32744'
+        8:
+            name: "Drogerie"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32758'
+        9:
+            name: "Dílna-a-zahrada"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32750'
+        10:
+            name: "Auto-moto"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32759'
+        11:
+            name: "Dům-a-domácí-potřeby"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32753'
+        12:
+            name: "Chovatelské-potřeby"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32754'
+        13:
+            name: "Zdraví"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32751'
+        14:
+            name: "Potraviny-a-alkohol"
+            url: 'http://affiliate.alza.cz/feed.xml?id=36848'
+        15:
+            name: "Počítače-a-notebooky"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32749'
+        16:
+            name: "Mobily-chytré-hodinky-tablety"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32745'
+        17:
+            name: "Kancelář-a-papírnictví"
+            url: 'http://affiliate.alza.cz/feed.xml?id=32755'
+        18:
+            name: "Domácí-a-osobní-spotřebiče"
+            url: 'http://affiliate.alza.cz/feed.xml?id=36849'
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: Price2Performance\Price2Performance\*Module\Presenters\*Presenter
+		Admin: Price2Performance\Price2Performance\Admin\Presenters\*Presenter
+
+session:
+	expiration: 14 days
+	autoStart: smart
+
+di:
+	export:
+		parameters: yes
+		tags: yes
+
+extensions:
+		console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+
+		# Common
+		#nettrine.annotations: Nettrine\Annotations\DI\AnnotationsExtension
+		nettrine.cache: Nettrine\Cache\DI\CacheExtension
+		nettrine.fixtures: Nettrine\Fixtures\DI\FixturesExtension
+		nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
+
+		# DBAL
+		nettrine.dbal: Nettrine\DBAL\DI\DbalExtension
+		nettrine.dbal.console: Nettrine\DBAL\DI\DbalConsoleExtension(%consoleMode%)
+
+		# ORM
+		nettrine.orm: Nettrine\ORM\DI\OrmExtension
+		#nettrine.orm.annotations: Nettrine\ORM\DI\OrmAnnotationsExtension
+		nettrine.orm.cache: Nettrine\ORM\DI\OrmCacheExtension
+		nettrine.orm.console: Nettrine\ORM\DI\OrmConsoleExtension
+		nettrine.orm.xml: Nettrine\ORM\DI\OrmXmlExtension
+
+		#nettrine.extensions.atlantic18: Nettrine\Extensions\Atlantic18\DI\Atlantic18BehaviorExtension
+
+decorator:
+    Symfony\Component\Console\Command\Command:
+        tags: [Nette\DI\Extensions\InjectExtension::TAG_INJECT]
+        inject: true
+
+nettrine.orm.xml:
+	mapping: [
+		Price2Performance\Price2Performance\Model\ORM\Entity: %appDir%/Model/ORM/Entity/xml
+	]
+	fileExtension: .dcm.xml
+	simple: false
+
+nettrine.orm:
+	configuration:
+		autoGenerateProxyClasses: %debugMode%
+		#customDatetimeFunctions:
+		#	date: DoctrineExtensions\Query\Mysql\Date
+		#	year: DoctrineExtensions\Query\Mysql\Year
+		#	month: DoctrineExtensions\Query\Mysql\Month
+		#customNumericFunctions:
+			#field: DoctrineExtensions\Query\Mysql\Field
+
+nettrine.migrations:
+	directory: %appDir%/Model/ORM/Migrations
+	namespace: Price2Performance\Price2Performance\ORM\Migrations
+
+nettrine.fixtures:
+	paths:
+		- %appDir%/../tests/Fixtures
+
+#nettrine.orm.annotations:
+#	mapping:
+#		Gedmo\Sortable: %appDir%/../vendor/gedmo/doctrine-extensions/src/Sortable/Entity
+
+#nettrine.extensions.atlantic18:
+#	sortable: true
+
+#rabbitmq:
+#	queues:
+#		sandboxQueue:
+#			connection: default
+#	producers:
+#		sandboxProducer:
+#			queue: sandboxQueue
+#			contentType: application/json
+#			deliveryMode: 2 # Producer::DELIVERY_MODE_PERSISTENT
+#	consumers:
+#		sandboxConsumer:
+#			queue: sandboxQueue
+#			callback: [@Price2Performance\Price2Performance\Console\SandboxConsumer, consume]
+#			qos:
+#				prefetchSize: 0
+#				prefetchCount: 1
