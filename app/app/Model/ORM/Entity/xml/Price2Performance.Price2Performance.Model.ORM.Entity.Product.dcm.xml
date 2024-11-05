@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Price2Performance\Price2Performance\Model\ORM\Entity\Product">
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="title" type="string" nullable="false" length="255">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="gid" type="string" nullable="false" length="255">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="productCondition" type="string" nullable="false" length="50">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="description" type="text" nullable="true">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="link" type="string" nullable="false" length="255">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="imageLink" type="string" nullable="false" length="255">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="brand" type="string" nullable="false" length="100">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="gtin" type="string" nullable="false" length="50">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="mpn" type="string" nullable="false" length="50">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="availability" type="string" nullable="false" length="50">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+        <field name="price" type="decimal" nullable="false" precision="10" scale="2">
+            <options>
+                <option name="fixed"/>
+            </options>
+        </field>
+
+        <!-- Nové sloupce -->
+        <field name="active" type="boolean" nullable="false">
+            <options>
+                <option name="default">true</option>
+            </options>
+        </field>
+
+        <field name="createdAt" type="datetime" column="created_at" nullable="false">
+            <options>
+                <option name="default">CURRENT_TIMESTAMP</option>
+            </options>
+        </field>
+
+        <field name="updatedAt" type="datetime" column="updated_at" nullable="false">
+            <options>
+                <option name="default">CURRENT_TIMESTAMP</option>
+            </options>
+        </field>
+
+        <many-to-one field="category" target-entity="Price2Performance\Price2Performance\Model\ORM\Entity\Category">
+            <join-column name="category_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
+
+        <!-- Indexy -->
+        <indexes>
+            <index name="gid_idx" columns="gid"/>
+            <index name="active_idx" columns="active"/>
+            <index name="brand_idx" columns="brand"/>
+        </indexes>
+    </entity>
+</doctrine-mapping>
